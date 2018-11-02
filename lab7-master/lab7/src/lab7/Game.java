@@ -19,7 +19,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /*
- Written by Jacob Burton  and Samuel Wood October&November 2018
+ Written by Jacob Burton and Samuel Wood October&November 2018
  This is the game scene/stage. Just the playing field.
  */
 
