@@ -3,6 +3,8 @@ package lab7;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.Timer;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -31,6 +33,8 @@ public class Game extends Application
 	private int trash = 0;
 	private int playerX = 0;
 	private int playerY = 0;
+	private int enemyX = 900;
+	private int enemyY = 550;
 	
 	// Need to be global scope to be accessed by other methods.
 	private ArrayList<TrashCan> trashCoords = new ArrayList<TrashCan>();
@@ -38,7 +42,7 @@ public class Game extends Application
 	
 	private FlowPane gameRoot = new FlowPane();
 
-	private Enemy enemy = new Enemy(900,550,"raccoon.png");
+	private Enemy enemy = new Enemy(enemyX,enemyY,"raccoon.png");
 
 	private Image enemyimg = new Image("File:"+enemy.getImg());
 	private ImageView enemyView = new ImageView(enemyimg);
@@ -75,7 +79,6 @@ public class Game extends Application
 			@Override
 			public void handle(ActionEvent startClick)
 			{
-
 				Image playerImage = new Image("file:trashtruckpng.png");
 				ImageView playerView = new ImageView(playerImage);
 				playerView.setFitWidth(120); 
@@ -102,22 +105,38 @@ public class Game extends Application
 				   playerView.setLayoutX(player.getPlayerX());
 				   
 				   trashPickup();
-				   raccoonHit();
 				});
-				
+
 				// Adds trash cans
 				Stage gameStage = (Stage) ((Node) startClick.getSource()).getScene().getWindow();											
 				gameStage.setScene(sceneStart);
 				gameStage.show();
-				
+				moveRaccoon();
+
 			}
-			
 		});
 		
 		Scene sceneInitial = new Scene(root, 1000, 600);
 		primaryStage.setScene(sceneInitial);
 		primaryStage.show();
 	}
+	
+	private void moveRaccoon() {
+		if (player.getPlayerX() > enemy.getpX()) enemyX+=10;
+		else if (player.getPlayerX() < enemy.getpX()) enemyX-=10;
+		
+		if (player.getPlayerY() > enemy.getpY()) enemyY+=10;
+		else if (player.getPlayerY() < enemy.getpY()) enemyY-=10;
+		
+		enemy.setpX(enemyX);
+		enemy.setpY(enemyY);
+
+		enemyView.setLayoutX(enemy.getpX());
+		enemyView.setLayoutY(enemy.getpY());
+		
+		raccoonHit();
+	}
+	
 	
 	private void addTrashCans(){
 		
@@ -157,6 +176,8 @@ public class Game extends Application
 			
 			//you lose
 			
+		} else {
+			setTimeout(()->moveRaccoon(), 300);
 		}
 	}
 	
@@ -183,6 +204,19 @@ public class Game extends Application
 				trashCoords.remove(i);
 			}
 		}
+	}
+	// Makeshift set time out that I did not write...https://stackoverflow.com/questions/26311470/what-is-the-equivalent-of-javascript-settimeout-in-java
+
+	private static void setTimeout(Runnable runnable, int delay){
+	    new Thread(() -> {
+	        try {
+	            Thread.sleep(delay);
+	            runnable.run();
+	        }
+	        catch (Exception e){
+	            System.err.println(e);
+	        }
+	    }).start();
 	}
 	
 	private boolean areRectsColliding(int object1Left, int object1Right, int object1Top, int object1Bot, int object2Left, int object2Right, int object2Top, int object2Bot)
