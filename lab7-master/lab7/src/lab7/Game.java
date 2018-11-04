@@ -183,7 +183,7 @@ public class Game extends Application
 		{
 			System.out.println("omg it works");
 			
-			//you lose
+			loseGame();
 			
 		} else {
 			setTimeout(()->moveRaccoon(), 300);
@@ -208,7 +208,7 @@ public class Game extends Application
 			{
 				System.out.println("alsndasd");
 				
-				//score++;
+				trashCollected++;
 				
 				trashCoords.remove(i);
 			}
