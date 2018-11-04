@@ -17,7 +17,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /*
@@ -36,9 +38,14 @@ public class Game extends Application
 	private int enemyX = 900;
 	private int enemyY = 550;
 	
+	private int trashCollected = 0;
+	
 	// Need to be global scope to be accessed by other methods.
 	private ArrayList<TrashCan> trashCoords = new ArrayList<TrashCan>();
-	private static int items = 1;
+	
+	private ArrayList<Integer> scores = new ArrayList<Integer>();
+	
+	private static int items = 5;
 	
 	private FlowPane gameRoot = new FlowPane();
 
@@ -48,6 +55,8 @@ public class Game extends Application
 	private ImageView enemyView = new ImageView(enemyimg);
 	
 	private Player player = new Player(truckerName, imageFile, trash, playerX, playerY);
+	
+	private Stage gameStage;
 	
 	public static void main(String[] args)
 	{
@@ -233,5 +242,30 @@ public class Game extends Application
 			}
 	}
 	
-	
+	private void loseGame()
+	{
+		GridPane loseRoot = new GridPane();
+	    
+		scores.add(trashCollected);
+		
+		Text highScores = new Text();
+		
+		for (int i = 0; i < scores.size(); i++)
+		{
+			System.out.println(scores.get(i) + "\n");
+		}
+			
+		GridPane.setRowIndex(highScores, 0);
+	    GridPane.setColumnIndex(highScores, 0);
+	    
+		Button continueButton = new Button("Click to retry");
+		GridPane.setRowIndex(continueButton, 7);
+	    GridPane.setColumnIndex(continueButton, 0);
+		
+		loseRoot.getChildren().addAll(continueButton, highScores);
+
+		Scene loseScreen = new Scene(loseRoot, 1000, 600);
+		gameStage.setScene(loseScreen);
+
+	}
 }
