@@ -117,7 +117,7 @@ public class Game extends Application
 				});
 
 				// Adds trash cans
-				Stage gameStage = (Stage) ((Node) startClick.getSource()).getScene().getWindow();											
+				gameStage = (Stage) ((Node) startClick.getSource()).getScene().getWindow();											
 				gameStage.setScene(sceneStart);
 				gameStage.show();
 				moveRaccoon();
@@ -242,7 +242,7 @@ public class Game extends Application
 			}
 	}
 	
-	private void loseGame()
+	private void loseGame()		//This method gives "illegal state exception : Not on FX application thread", but it didn't used to - worked once
 	{
 		GridPane loseRoot = new GridPane();
 	    
@@ -259,13 +259,21 @@ public class Game extends Application
 	    GridPane.setColumnIndex(highScores, 0);
 	    
 		Button continueButton = new Button("Click to retry");
-		GridPane.setRowIndex(continueButton, 7);
+		GridPane.setRowIndex(continueButton, 1);
 	    GridPane.setColumnIndex(continueButton, 0);
 		
 		loseRoot.getChildren().addAll(continueButton, highScores);
-
-		Scene loseScreen = new Scene(loseRoot, 1000, 600);
-		gameStage.setScene(loseScreen);
+		
+		continueButton.setOnAction(new EventHandler<ActionEvent>()
+		{
+			@Override
+			public void handle(ActionEvent startClick) {
+				//go back to startScene
+				
+			}
+		});
+		Scene loseScreen = new Scene(loseRoot, 1000, 600);		
+		gameStage.setScene(loseScreen);		//why did it work the first time? code looks the same
 
 	}
 }
